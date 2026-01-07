@@ -53,7 +53,7 @@ stages:
           Start-Sleep -Seconds 5
           
           Write-Host "Deploying WAR"
-          Copy-Item "$(Pipeline.Workspace)\war-file\$(WAR_NAME)" "$(env:CATALINA_HOME)\webapps\" -Force
+          Copy-Item "$(Pipeline.Workspace)\war-file\JavaLoginShowcase.war" "$($env:CATALINA_HOME)\webapps\" -Force
           
           Write-host "Starting Tomcat"
           & "$($env:CATALINA_HOME)\bin\startup.bat"
