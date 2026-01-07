@@ -49,9 +49,9 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          Write-Host "Stopping Tomcat (ignore error if already stopped)"
-          & "$($env:CATALINA_HOME)\bin\shutdown.bat" || Write-Host "Tomcat already stopped"
-          Start-Sleep -Seconds 5
+          # Write-Host "Stopping Tomcat (ignore error if already stopped)"
+          # & "$($env:CATALINA_HOME)\bin\shutdown.bat" || Write-Host "Tomcat already stopped"
+          # Start-Sleep -Seconds 5
 
           Write-Host "Deploying WAR"
           Copy-Item "$(Pipeline.Workspace)\artifact\JavaLoginShowcase.war" `
