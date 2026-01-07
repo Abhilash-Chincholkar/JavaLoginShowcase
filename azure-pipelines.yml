@@ -49,7 +49,7 @@ stages:
         targetType: 'inline'
         script: |
           Write-Host "Stopping Tomcat"
-          & "env:CATALINA_HOME\bin\shutdown.bat"
+          & "$($env:CATALINA_HOME)\bin\shutdown.bat"
           Start-Sleep -Seconds 5
           
           Write-Host "Deploying WAR"
