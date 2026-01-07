@@ -1,0 +1,34 @@
+trigger:
+- main
+
+pool: test
+
+variables:
+  WAR_NAME: JavaLoginShowcase.war
+stages:
+- stage: Build
+  displayName: Build WAR
+  jobs:
+  - job: Build_Java
+    steps:
+    - task: Maven@4
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'clean package'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+    - task: PowerShell@2
+      displayName: Rename WAR
+      inputs:
+        targetType: 'inline'
+        script: 'Rename-Item target\JavaLoginShowcase-1.0.0.war $(WAR_NAME)'
+    - task: PublishBuildArtifacts@1
+      displayName: Publish WAR Artifact
+      inputs:
+        PathtoPublish: 'target'
+        ArtifactName: 'war-file'
