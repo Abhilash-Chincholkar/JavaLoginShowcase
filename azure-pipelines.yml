@@ -56,6 +56,6 @@ stages:
           Copy-Item "$(Pipeline.Workspace)\war-file\$(WAR_NAME)" "$(env:CATALINA_HOME)\webapps\" -Force
           
           Write-host "Starting Tomcat"
-          & "env:CATLINA_HOME\bin\startup.bat
+          & "$($env:CATALINA_HOME)\bin\startup.bat"
       displayName: Deploy WAR to Tomcat
 
