@@ -32,3 +32,30 @@ stages:
       inputs:
         PathtoPublish: 'target'
         ArtifactName: 'war-file'
+
+- stage: Deploy
+  displayName: Deploy to Tomcat
+  dependsOn: Build
+  jobs:
+  - job:
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'war-file'
+        targetPath: '$(Pipeline.Workspace)'
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Stopping Tomcat"
+          & "env:CATALINA_HOME\bin\shutdown.bat"
+          Start-Sleep -Seconds 5
+          
+          Write-Host "Deploying WAR"
+          Copy-Item "$(Pipeline.Workspace)\war-file\$(WAR_NAME)" "$env:CATALINA_HOME\webapps\" -Force
+          
+          Write-host "Starting Tomcat"
+          & "env:CATLINA_HOME\bin\startup.bat
+      displayName: Deploy WAR to Tomcat
+
