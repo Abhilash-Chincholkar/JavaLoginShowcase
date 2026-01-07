@@ -45,17 +45,18 @@ stages:
         artifactName: 'war-file'
         targetPath: '$(Pipeline.Workspace)'
     - task: PowerShell@2
+      displayName: Deploy WAR
       inputs:
         targetType: 'inline'
         script: |
-          Write-Host "Stopping Tomcat"
-          & "$($env:CATALINA_HOME)\bin\shutdown.bat"
+          Write-Host "Stopping Tomcat (ignore error if already stopped)"
+          & "$($env:CATALINA_HOME)\bin\shutdown.bat" || Write-Host "Tomcat already stopped"
           Start-Sleep -Seconds 5
-          
+
           Write-Host "Deploying WAR"
-          Copy-Item "$(Pipeline.Workspace)\war-file\JavaLoginShowcase.war" "$($env:CATALINA_HOME)\webapps\" -Force
-          
-          Write-host "Starting Tomcat"
+          Copy-Item "$(Pipeline.Workspace)\artifact\JavaLoginShowcase.war" `
+          "$($env:CATALINA_HOME)\webapps\" -Force
+
+          Write-Host "Starting Tomcat"
           & "$($env:CATALINA_HOME)\bin\startup.bat"
-      displayName: Deploy WAR to Tomcat
 
